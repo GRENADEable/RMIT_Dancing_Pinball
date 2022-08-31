@@ -17,12 +17,21 @@ public class GameManagerPinball : MonoBehaviour
     [SerializeField]
     [Tooltip("How fast you want the Slider to move?")]
     private float powerSliderSpeed = default;
+
+    [SerializeField]
+    [Tooltip("After how much time to move the Ball when Stuck?")]
+    private float moveAfterIdleState = default;
+
+    [SerializeField]
+    [Tooltip("Idle to move Force")]
+    private float moveAfterIdlieForce = default;
     #endregion
 
     #region Private Variables
     private bool _isCharging = default;
     private bool _isDirUp = default;
-    //private bool _canCharge = default;
+    private float _currentIdleDuration = default;
+    private bool _isBallShot = default;
     #endregion
 
     #region Unity Callbacks
@@ -51,17 +60,20 @@ public class GameManagerPinball : MonoBehaviour
 
     void Update()
     {
-        //if (_canCharge)
-        //{
-        if (Input.GetKeyDown(KeyCode.Space))
-            StartCharging();
+        if (!_isBallShot)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+                StartCharging();
 
-        if (Input.GetKeyUp(KeyCode.Space))
-            StopCharging();
-        //}
+            if (Input.GetKeyUp(KeyCode.Space))
+                StopCharging();
+        }
 
         if (_isCharging)
             SetPowerBall();
+
+        if (_isBallShot)
+            CheckIfBallIdle();
     }
     #endregion
 
@@ -111,7 +123,23 @@ public class GameManagerPinball : MonoBehaviour
     void StopCharging()
     {
         _isCharging = false;
+        _isBallShot = true;
         ballRg.AddForce(Vector3.up * Mathf.Abs(powerSlider.value), ForceMode.Impulse);
+    }
+
+    /// <summary>
+    /// Timer check if the ball gets stuck on the obstacle;
+    /// </summary>
+    void CheckIfBallIdle()
+    {
+        if (ballRg.IsSleeping())
+            _currentIdleDuration += Time.deltaTime;
+
+        if (_currentIdleDuration >= moveAfterIdleState)
+        {
+            _currentIdleDuration = 0;
+            ballRg.AddForce(Vector3.up * moveAfterIdlieForce, ForceMode.Impulse);
+        }
     }
     #endregion
 
