@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,11 +13,16 @@ public class GameManagerPinball : MonoBehaviour
     [SerializeField]
     [Tooltip("Power Slider")]
     private Slider powerSlider = default;
+
+    [SerializeField]
+    [Tooltip("How fast you want the Slider to move?")]
+    private float powerSliderSpeed = default;
     #endregion
 
     #region Private Variables
-    //[SerializeField] private float _ballPower = default;
     private bool _isCharging = default;
+    private bool _isDirUp = default;
+    //private bool _canCharge = default;
     #endregion
 
     #region Unity Callbacks
@@ -47,7 +51,17 @@ public class GameManagerPinball : MonoBehaviour
 
     void Update()
     {
-        SetPowerBall();
+        //if (_canCharge)
+        //{
+        if (Input.GetKeyDown(KeyCode.Space))
+            StartCharging();
+
+        if (Input.GetKeyUp(KeyCode.Space))
+            StopCharging();
+        //}
+
+        if (_isCharging)
+            SetPowerBall();
     }
     #endregion
 
@@ -57,27 +71,47 @@ public class GameManagerPinball : MonoBehaviour
     /// </summary>
     void SetPowerBall()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            _isCharging = true;
-
-        if (Input.GetKeyUp(KeyCode.Space))
-            _isCharging = false;
-
-        if (_isCharging)
+        if (_isDirUp)
         {
-            powerSlider.value++;
+            powerSlider.value += Time.deltaTime * powerSliderSpeed;
 
             if (powerSlider.value >= powerSlider.maxValue)
-                _isCharging = false;
+            {
+                _isDirUp = false;
+                powerSlider.value = powerSlider.maxValue;
+            }
         }
         else
         {
-            powerSlider.value--;
+            powerSlider.value -= Time.deltaTime * powerSliderSpeed;
 
             if (powerSlider.value <= powerSlider.minValue)
-                _isCharging = true;
+            {
+                _isDirUp = true;
+                powerSlider.value = powerSlider.minValue;
+            }
         }
+    }
 
+    /// <summary>
+    /// Starts charging the bar when spacebar is pressed;
+    /// Changes the slider UI to move up and down;
+    /// </summary>
+    void StartCharging()
+    {
+        _isCharging = true;
+        powerSlider.value = powerSlider.minValue;
+        _isDirUp = true;
+    }
+
+    /// <summary>
+    /// Stops charging the bar when spacebar is lifted;
+    /// Sets the Force on the ball;
+    /// </summary>
+    void StopCharging()
+    {
+        _isCharging = false;
+        ballRg.AddForce(Vector3.up * Mathf.Abs(powerSlider.value), ForceMode.Impulse);
     }
     #endregion
 
