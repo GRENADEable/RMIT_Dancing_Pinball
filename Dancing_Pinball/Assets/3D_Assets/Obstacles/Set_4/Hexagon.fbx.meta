@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fab7d3a17b9d9ac4684224cd17568622
+guid: e91e37606f8f7d84382f1bbf2ccfbafc
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: mat_Set_2
-    second: {fileID: 2100000, guid: a50dbbe16f91b3b48a455898d5b5a358, type: 2}
+      name: mat_Set_4
+    second: {fileID: 2100000, guid: b36154fdcbea58245a8fd6f9afcc0f49, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -70,15 +70,15 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 60
-    normalImportMode: 0
+    normalSmoothAngle: 40
+    normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 1
+  importAnimation: 0
   humanDescription:
     serializedVersion: 3
     human: []
@@ -97,7 +97,7 @@ ModelImporter:
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
