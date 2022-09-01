@@ -2246,7 +2246,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 454112106}
-  m_LocalRotation: {x: 0.014334796, y: 0.4006771, z: -0.0062697455, w: 0.9160858}
+  m_LocalRotation: {x: 0.014334797, y: 0.4006771, z: -0.006269745, w: 0.9160858}
   m_LocalPosition: {x: -2.02, y: 3.48, z: -7.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3868,7 +3868,6 @@ MonoBehaviour:
   powerSliderSpeed: 150
   moveAfterIdleState: 5
   moveAfterIdlieForce: 10
-  _currentIdleDuration: 0
 --- !u!1 &854230227
 GameObject:
   m_ObjectHideFlags: 0
@@ -4501,7 +4500,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.014334796, y: 0.4006771, z: -0.0062697455, w: 0.9160858}
+  m_LocalRotation: {x: 0.014334797, y: 0.4006771, z: -0.006269745, w: 0.9160858}
   m_LocalPosition: {x: -2.02, y: 3.48, z: -7.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
