@@ -25,6 +25,14 @@ public class GameManagerPinball : MonoBehaviour
     [SerializeField]
     [Tooltip("Idle to move Force")]
     private float moveAfterIdlieForce = default;
+
+    [SerializeField]
+    [Tooltip("Popup Text Animator Controller")]
+    private Animator popupTextAnim = default;
+
+    [SerializeField]
+    [Tooltip("Popup Text Image")]
+    private Image popupTextImage = default;
     #endregion
 
     #region Private Variables
@@ -39,17 +47,17 @@ public class GameManagerPinball : MonoBehaviour
     #region Events
     void OnEnable()
     {
-
+        StoryCollision.OnObstacleCollide += OnObstacleCollideEventRecieved;
     }
 
     void OnDisable()
     {
-
+        StoryCollision.OnObstacleCollide -= OnObstacleCollideEventRecieved;
     }
 
     void OnDestroy()
     {
-
+        StoryCollision.OnObstacleCollide -= OnObstacleCollideEventRecieved;
     }
     #endregion
 
@@ -72,8 +80,8 @@ public class GameManagerPinball : MonoBehaviour
         if (_isCharging)
             SetPowerBall();
 
-        if (_isBallShot)
-            CheckIfBallIdle();
+        //if (_isBallShot)
+        //    CheckIfBallIdle();
     }
     #endregion
 
@@ -123,7 +131,7 @@ public class GameManagerPinball : MonoBehaviour
     void StopCharging()
     {
         _isCharging = false;
-        _isBallShot = true;
+        //_isBallShot = true;
         ballRg.AddForce(Vector3.up * Mathf.Abs(powerSlider.value), ForceMode.Impulse);
     }
 
@@ -144,10 +152,26 @@ public class GameManagerPinball : MonoBehaviour
     #endregion
 
     #region Coroutines
-
+    IEnumerator PauseDelay()
+    {
+        Time.timeScale = 0.5f;
+        yield return new WaitForSeconds(0.5f);
+        Time.timeScale = 1;
+    }
     #endregion
 
     #region Events
-
+    /// <summary>
+    /// Subbed to event StoryCollision;
+    /// Stores the string and image variables;
+    /// </summary>
+    /// <param name="storyTxt"> Story Text from the SO Data; </param>
+    /// <param name="image"> Story Image from the SO Data; </param>
+    void OnObstacleCollideEventRecieved(string storyTxt, Sprite image)
+    {
+        popupTextAnim.Play("Popup_Story_Anim");
+        StartCoroutine(PauseDelay());
+        popupTextImage.sprite = image;
+    }
     #endregion
 }
