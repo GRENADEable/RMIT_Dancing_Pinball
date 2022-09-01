@@ -33,6 +33,10 @@ public class GameManagerPinball : MonoBehaviour
     [SerializeField]
     [Tooltip("Popup Text Image")]
     private Image popupTextImage = default;
+
+    [SerializeField]
+    [Tooltip("Slow Time Value")]
+    private float slowTimeVal = default;
     #endregion
 
     #region Private Variables
@@ -154,7 +158,7 @@ public class GameManagerPinball : MonoBehaviour
     #region Coroutines
     IEnumerator PauseDelay()
     {
-        Time.timeScale = 0.5f;
+        Time.timeScale = slowTimeVal;
         yield return new WaitForSeconds(0.5f);
         Time.timeScale = 1;
     }

@@ -18,7 +18,7 @@ public class StoryCollision : MonoBehaviour
     #endregion
 
     #region Private Variables
-    [SerializeField] private bool _isCollided;
+    private bool _isCollided;
     #endregion
 
     #region Unity Callbacks
@@ -55,8 +55,6 @@ public class StoryCollision : MonoBehaviour
         if (other.collider.CompareTag("Player") && !_isCollided)
         {
             OnObstacleCollide?.Invoke(storyDatas.storyText, storyDatas.storyImage);
-            //GameObject particleObj = Instantiate(popupTextParticlePrefab, popupTextParticlePos.position, popupTextParticlePos.rotation);
-            //Destroy(particleObj, 2);
             _isCollided = true;
         }
     }
