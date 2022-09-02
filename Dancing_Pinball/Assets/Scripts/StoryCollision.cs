@@ -22,30 +22,7 @@ public class StoryCollision : MonoBehaviour
     #endregion
 
     #region Unity Callbacks
-
-    #region Events
-    void OnEnable()
-    {
-
-    }
-
-    void OnDisable()
-    {
-
-    }
-
-    void OnDestroy()
-    {
-
-    }
-    #endregion
-
     void Start()
-    {
-
-    }
-
-    void Update()
     {
 
     }
@@ -58,17 +35,5 @@ public class StoryCollision : MonoBehaviour
             _isCollided = true;
         }
     }
-    #endregion
-
-    #region My Functions
-
-    #endregion
-
-    #region Coroutines
-
-    #endregion
-
-    #region Events
-
     #endregion
 }
