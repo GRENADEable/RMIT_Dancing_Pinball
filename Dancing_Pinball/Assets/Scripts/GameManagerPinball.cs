@@ -90,6 +90,7 @@ public class GameManagerPinball : MonoBehaviour
     #endregion
 
     #region My Functions
+
     /// <summary>
     /// Sets the power of the ball when Spacebar is Held;
     /// </summary>
