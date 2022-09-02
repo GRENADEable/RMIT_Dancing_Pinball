@@ -148,6 +148,9 @@ public class GameManagerPinball : MonoBehaviour
 
             if (_isBallShot)
                 CheckIfBallIdle();
+
+            if (Input.GetKeyDown(KeyCode.R))
+                StartCoroutine(RestartDelay());
         }
     }
     #endregion
@@ -279,6 +282,14 @@ public class GameManagerPinball : MonoBehaviour
     {
         gmData.ChangeGameState("Outro");
         yield return new WaitForSeconds(3f);
+        fadeBG.Play("Fade_Out");
+        yield return new WaitForSeconds(0.5f);
+        gmData.ChangeLevel(1);
+    }
+
+    IEnumerator RestartDelay()
+    {
+        gmData.ChangeGameState("Outro");
         fadeBG.Play("Fade_Out");
         yield return new WaitForSeconds(0.5f);
         gmData.ChangeLevel(1);
