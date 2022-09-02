@@ -3,7 +3,12 @@ guid: 1638d2057165c60409e4fd2ac9677710
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_Spring
+    second: {fileID: 2100000, guid: 46915d4f0f8328a4dafbc62b216f34ba, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

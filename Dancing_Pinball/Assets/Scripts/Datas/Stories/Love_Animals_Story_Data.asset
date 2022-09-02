@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d0593f5185780345b758ec5730ab279, type: 3}
   m_Name: Love_Animals_Story_Data
   m_EditorClassIdentifier: 
-  storyText: You fall in love with animals
+  storyText: You fall in love with animals.
   storyImage: {fileID: 21300000, guid: fc7f9ec48e96dc143947109243f1824c, type: 3}

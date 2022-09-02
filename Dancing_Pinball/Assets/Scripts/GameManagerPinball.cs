@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManagerPinball : MonoBehaviour
 {
@@ -13,10 +13,6 @@ public class GameManagerPinball : MonoBehaviour
     [SerializeField]
     [Tooltip("GameManager Scriptable Object")]
     private GameManagerData gmData = default;
-
-    [SerializeField]
-    [Tooltip("Fade panel Animation Component")]
-    private Animator fadeBG = default;
     #endregion
 
     #region Audios
@@ -30,16 +26,27 @@ public class GameManagerPinball : MonoBehaviour
     private AudioClip[] sfxClips = default;
     #endregion
 
-    #region Ball Variables
-    [Space, Header("Ball Variables")]
+    #region GameObjects
+    [Space, Header("GameObjects")]
     [SerializeField]
-    [Tooltip("Pinball Power Paddle")]
-    private Rigidbody ballRg = default;
+    [Tooltip("Pinball Stationary Platform")]
+    private GameObject pinballStationaryPlatform = default;
 
     [SerializeField]
-    [Tooltip("Power Slider")]
-    private Slider powerSlider = default;
+    [Tooltip("HUD Panel GameObject")]
+    private GameObject hudPanel = default;
 
+    [SerializeField]
+    [Tooltip("Fail Panel GameObject")]
+    private GameObject failPanel = default;
+
+    [SerializeField]
+    [Tooltip("Result Panel GameObject")]
+    private GameObject resultPanel = default;
+    #endregion
+
+    #region Floats
+    [Space, Header("Floats")]
     [SerializeField]
     [Tooltip("How fast you want the Slider to move?")]
     private float powerSliderSpeed = default;
@@ -52,21 +59,17 @@ public class GameManagerPinball : MonoBehaviour
     [Tooltip("Idle to move Force")]
     private float moveAfterIdlieForce = default;
 
-    #endregion
-
-    #region Paddle Variables
-    [Space, Header("Paddle Variables")]
     [SerializeField]
-    [Tooltip("Pinball Stationary Platform")]
-    private GameObject pinballStationaryPlatform = default;
+    [Tooltip("Slow Time Value")]
+    private float slowTimeVal = default;
 
     [SerializeField]
-    [Tooltip("Pinball Moving Platform")]
-    private Animator pinballMovingPlatformAnim = default;
+    [Tooltip("End delay")]
+    private float endDelay = default;
     #endregion
 
     #region UI Variables
-    [Space, Header("Popup Variables")]
+    [Space, Header("UI Variables")]
     [SerializeField]
     [Tooltip("Popup Text Animator Controller")]
     private Animator popupTextAnim = default;
@@ -76,16 +79,27 @@ public class GameManagerPinball : MonoBehaviour
     private Image popupTextImage = default;
 
     [SerializeField]
-    [Tooltip("Slow Time Value")]
-    private float slowTimeVal = default;
+    [Tooltip("Power Slider")]
+    private Slider powerSlider = default;
 
     [SerializeField]
-    [Tooltip("HUD Panel GameObject")]
-    private GameObject hudPanel = default;
+    [Tooltip("Result text")]
+    private TextMeshProUGUI resultText = default;
+    #endregion
+
+    #region Other
+    [Space, Header("Other")]
+    [SerializeField]
+    [Tooltip("Pinball Power Paddle")]
+    private Rigidbody ballRg = default;
 
     [SerializeField]
-    [Tooltip("Fail Panel GameObject")]
-    private GameObject failPanel = default;
+    [Tooltip("Pinball Moving Platform")]
+    private Animator pinballMovingPlatformAnim = default;
+
+    [SerializeField]
+    [Tooltip("Fade panel Animation Component")]
+    private Animator fadeBG = default;
     #endregion
 
     #endregion
@@ -95,6 +109,7 @@ public class GameManagerPinball : MonoBehaviour
     private bool _isDirUp = default;
     private float _currentIdleDuration = default;
     private bool _isBallShot = default;
+    private List<string> _storyTexts = new List<string>();
     #endregion
 
     #region Unity Callbacks
@@ -127,7 +142,6 @@ public class GameManagerPinball : MonoBehaviour
         AudioAccess(0, 0.3f);
         fadeBG.Play("Fade_In");
         gmData.ChangeGameState("Game");
-        //StartCoroutine(StartDelay());
     }
 
     void Update()
@@ -150,12 +164,39 @@ public class GameManagerPinball : MonoBehaviour
                 CheckIfBallIdle();
 
             if (Input.GetKeyDown(KeyCode.R))
-                StartCoroutine(RestartDelay());
+                StartCoroutine(FailRestartDelay());
+        }
+
+        if (gmData.currState == GameManagerData.GameState.Outro)
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+                StartCoroutine(EndDelay());
         }
     }
     #endregion
 
     #region My Functions
+
+    /// <summary>
+    /// Shows the Result Screen when the Ball Reaches the End;
+    /// </summary>
+    public void OnTextEnd()
+    {
+        hudPanel.SetActive(false);
+        resultPanel.SetActive(true);
+
+        resultText.text = $"In Loving Memory: \n";
+
+        if (_storyTexts.Count > 0)
+            resultText.text += $"{_storyTexts[0]} \n";
+
+        for (int i = 1; i < _storyTexts.Count; i++)
+            resultText.text += $"Then {_storyTexts[i]} \n";
+
+        resultText.text += $"\nPress R to restart game \n";
+        gmData.ChangeGameState("Outro");
+
+    }
 
     /// <summary>
     /// Sets the power of the ball when Spacebar is Held;
@@ -262,18 +303,6 @@ public class GameManagerPinball : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    ///// <summary>
-    ///// Starts game with a delay;
-    ///// </summary>
-    ///// <returns> Float Delay </returns>
-    //IEnumerator StartDelay()
-    //{
-    //    gmData.ChangeGameState("Intro");
-    //    fadeBG.Play("Fade_In");
-    //    yield return new WaitForSeconds(0.5f);
-    //    gmData.ChangeGameState("Game");
-    //}
-
     /// <summary>
     /// Restarts game if ball doesn't leave the ramp;
     /// </summary>
@@ -281,18 +310,23 @@ public class GameManagerPinball : MonoBehaviour
     IEnumerator FailRestartDelay()
     {
         gmData.ChangeGameState("Outro");
-        yield return new WaitForSeconds(3f);
         fadeBG.Play("Fade_Out");
         yield return new WaitForSeconds(0.5f);
         gmData.ChangeLevel(1);
+        Time.timeScale = 1;
     }
 
-    IEnumerator RestartDelay()
+    /// <summary>
+    /// Restarts game if ball doesn't leave the ramp;
+    /// </summary>
+    /// <returns> Float Delay </returns>
+    IEnumerator EndDelay()
     {
-        gmData.ChangeGameState("Outro");
+        gmData.ChangeGameState("End");
         fadeBG.Play("Fade_Out");
         yield return new WaitForSeconds(0.5f);
         gmData.ChangeLevel(1);
+        Time.timeScale = 1;
     }
     #endregion
 
@@ -313,6 +347,7 @@ public class GameManagerPinball : MonoBehaviour
         int clipIndex = Random.Range(1, 2);
         float pitchIndex = Random.Range(0.8f, 1.2f);
         AudioAccess(clipIndex, 1, true, pitchIndex);
+        _storyTexts.Add(storyTxt);
     }
 
     /// <summary>

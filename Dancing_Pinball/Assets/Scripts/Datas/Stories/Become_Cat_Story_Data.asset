@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d0593f5185780345b758ec5730ab279, type: 3}
-  m_Name: Get_Cat_Story_Data
+  m_Name: Become_Cat_Story_Data
   m_EditorClassIdentifier: 
-  storyText: You get a cat.
+  storyText: You become a cat.
   storyImage: {fileID: 21300000, guid: 4b2d09a4ce2d2f34590516a6945b31a2, type: 3}
