@@ -19,40 +19,11 @@ public class GameManagerMenu : MonoBehaviour
     private Button[] menuButtons;
     #endregion
 
-    #region Private Variables
-
-    #endregion
-
-    #region Unity Callbacks
-
-    #region Events
-    void OnEnable()
-    {
-
-    }
-
-    void OnDisable()
-    {
-
-    }
-
-    void OnDestroy()
-    {
-
-    }
-    #endregion
-
     void Start()
     {
         gmData.EnableCursor();
         fadeBG.Play("Fade_In");
     }
-
-    void Update()
-    {
-
-    }
-    #endregion
 
     #region My Functions
 
