@@ -253,8 +253,6 @@ public class GameManagerPinball : MonoBehaviour
     /// </summary>
     void StopCharging()
     {
-        hudPanel.SetActive(false);
-
         AudioAccess(3, 1);
         _isCharging = false;
         _isBallShot = true;
