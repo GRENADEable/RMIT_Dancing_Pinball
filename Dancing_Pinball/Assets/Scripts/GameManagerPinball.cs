@@ -142,6 +142,7 @@ public class GameManagerPinball : MonoBehaviour
         AudioAccess(0, 0.3f);
         fadeBG.Play("Fade_In");
         gmData.ChangeGameState("Game");
+        gmData.DisableCursor();
     }
 
     void Update()
@@ -172,6 +173,9 @@ public class GameManagerPinball : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.R))
                 StartCoroutine(EndDelay());
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            StartCoroutine(ExitDelay());
     }
     #endregion
 
@@ -182,6 +186,8 @@ public class GameManagerPinball : MonoBehaviour
     /// </summary>
     public void OnTextEnd()
     {
+        Time.timeScale = 1;
+
         hudPanel.SetActive(false);
         resultPanel.SetActive(true);
 
@@ -194,12 +200,15 @@ public class GameManagerPinball : MonoBehaviour
             resultText.text += $"Then {_storyTexts[i]} \n";
 
         resultText.text += $"\nPress R to restart game \n";
+        resultText.text += $"Press Esc to quit game \n";
+
         gmData.ChangeGameState("Outro");
 
+        AudioAccess(5, 0.3f);
     }
 
     /// <summary>
-    /// Sets the power of the ball when Spacebar is Held;
+    /// Sets the power of the ball when Spacebar is held;
     /// </summary>
     void SetPowerBall()
     {
@@ -244,6 +253,8 @@ public class GameManagerPinball : MonoBehaviour
     /// </summary>
     void StopCharging()
     {
+        hudPanel.SetActive(false);
+
         AudioAccess(3, 1);
         _isCharging = false;
         _isBallShot = true;
@@ -327,6 +338,19 @@ public class GameManagerPinball : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         gmData.ChangeLevel(1);
         Time.timeScale = 1;
+    }
+
+    /// <summary>
+    /// Ends game with delay;
+    /// </summary>
+    /// <returns> Float Delay </returns>
+    IEnumerator ExitDelay()
+    {
+        Time.timeScale = 1;
+        gmData.ChangeGameState("End");
+        fadeBG.Play("Fade_Out");
+        yield return new WaitForSeconds(0.5f);
+        gmData.QuitGame();
     }
     #endregion
 

@@ -3262,6 +3262,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7480c4524d522574a8884db86aaafc35, type: 3}
   - {fileID: 8300000, guid: f5c4ab37b7f84b1489aef9245743650d, type: 3}
   - {fileID: 8300000, guid: 628c670cc1db7174a8daf85721f9fb66, type: 3}
+  - {fileID: 8300000, guid: 71c65113e3fc7c74caabb7ae8a40d7a1, type: 3}
   pinballStationaryPlatform: {fileID: 1907370056}
   hudPanel: {fileID: 646057391}
   failPanel: {fileID: 458993122}
